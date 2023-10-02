@@ -51,6 +51,7 @@ describe('GET /hotels', () => {
   describe('Tem token valido', async () => {
 
     it('usuario sem inscrição deve retornar 404', async () => {
+      await cleanDb();
       const user = await createUser();
       const token = await generateValidToken(user);
 
