@@ -10,11 +10,14 @@ async function getHotels(userId: number) {
 
     const ticket = await ticketsRepository.findTicketByEnrollmentId(enrollments.id);
 
-    if (!ticket || ticket.status === 'RESERVED' || ticket.TicketType.isRemote || !ticket.TicketType.includesHotel) {
-      throw cannotListHotelsError(); // LANÇA UM ERRO PARA A FUNÇÃO QUE O CHAMOU
+    if(!ticket) throw notFoundError();
+
+    if (ticket.status === 'RESERVED' || ticket.TicketType.isRemote || !ticket.TicketType.includesHotel) {
+      throw cannotListHotelsError();
     }
   
     const hotels = await hotelRepository.findHotels();
+    if(!hotels) throw notFoundError();
     return hotels;
   }
 
@@ -23,9 +26,11 @@ async function getHotels(userId: number) {
     if(!enrollments) throw notFoundError();
 
     const ticket = await ticketsRepository.findTicketByEnrollmentId(enrollments.id);
+  
+    if(!ticket) throw notFoundError();
 
-    if (!ticket || ticket.status === 'RESERVED' || ticket.TicketType.isRemote || !ticket.TicketType.includesHotel) {
-      throw cannotListHotelsError(); // LANÇA UM ERRO PARA A FUNÇÃO QUE O CHAMOU
+    if (ticket.status === 'RESERVED' || ticket.TicketType.isRemote || !ticket.TicketType.includesHotel) {
+      throw cannotListHotelsError();
     }
   
     const hotel = await hotelRepository.findHotelByHotelId(hotelId);

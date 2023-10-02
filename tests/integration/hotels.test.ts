@@ -61,6 +61,16 @@ describe('GET /hotels', () => {
       expect(result.status).toEqual(httpStatus.NOT_FOUND);
     });
 
+    it('Mostre 404 se não existir ticket', async ()=>{
+      const user = await createUser();
+      const token = await generateValidToken(user);
+      const enrollment = await createEnrollmentWithAddress(user);
+
+      const result = await server.get('/hotels').set('Authorization', `Bearer ${token}`);
+
+      expect(result.status).toEqual(httpStatus.NOT_FOUND);
+    }),
+
     it('Deve retornar 402 quando remoto', async () => {
       const user = await createUser();
       const token = await generateValidToken(user);
